@@ -1,12 +1,11 @@
-#!/usr/bin/python3
 import sys
 import os
 
-# Add your project directory to the sys.path
-sys.path.insert(0, "/home/YOUR_USERNAME/public_html/paschoalotto/")
+# 1. Add the project root to the PYTHONPATH (so imports work)
+project_home = os.path.dirname(__file__)
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
 
+# 2. Import your Flask app and expose it as "application"
 from app import app
-
-if __name__ == "__main__":
-    app.run()
-
+application = app
