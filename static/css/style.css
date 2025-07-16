@@ -836,4 +836,10 @@ textarea:focus {
         margin-right: 0 !important;
     }
 }
+/* Fixed height + scrollbar for Priority Actions & AI Suggestions cards */
+.priority-actions-card .card-body,
+.ai-insights-card    .card-body {
+  max-height: 300px;   /* adjust if you need a different height */
+  overflow-y: auto;
+}
 
