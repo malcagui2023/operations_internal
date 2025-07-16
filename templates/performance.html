@@ -3,47 +3,25 @@
 {% block title %}{{ 'Performance' if lang == 'pt' else 'Performance' }} - {{ translations.app_title }}{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>{{ 'Performance' if lang == 'pt' else 'Performance' }}</h2>
-                <span class="badge bg-primary fs-6">{{ 'Em Desenvolvimento' if lang == 'pt' else 'In Development' }}</span>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    {{ 'Performance' if lang == 'pt' else 'Performance' }}
+                </h5>
             </div>
-            
-            <div class="alert alert-info" role="alert">
-                <i class="fas fa-info-circle me-2"></i>
-                {{ 'Esta página está sendo desenvolvida. Em breve você terá acesso a relatórios detalhados de performance.' if lang == 'pt' else 'This page is under development. Soon you will have access to detailed performance reports.' }}
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-                            <h5>{{ 'Métricas Individuais' if lang == 'pt' else 'Individual Metrics' }}</h5>
-                            <p class="text-muted">{{ 'Acompanhe seu desempenho pessoal' if lang == 'pt' else 'Track your personal performance' }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-users fa-3x text-info mb-3"></i>
-                            <h5>{{ 'Comparação de Equipe' if lang == 'pt' else 'Team Comparison' }}</h5>
-                            <p class="text-muted">{{ 'Compare com outros operadores' if lang == 'pt' else 'Compare with other operators' }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-robot fa-3x text-warning mb-3"></i>
-                            <h5>{{ 'Uso do AI' if lang == 'pt' else 'AI Usage' }}</h5>
-                            <p class="text-muted">{{ 'Estatísticas de uso do assistente' if lang == 'pt' else 'Assistant usage statistics' }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body text-center py-5">
+                <i class="fas fa-tools fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">{{ 'Em Desenvolvimento' if lang == 'pt' else 'Under Development' }}</h4>
+                <p class="text-muted">
+                    {{ 'Esta funcionalidade está sendo desenvolvida e estará disponível em breve.' if lang == 'pt' else 'This feature is being developed and will be available soon.' }}
+                </p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    {{ 'Voltar ao Dashboard' if lang == 'pt' else 'Back to Dashboard' }}
+                </a>
             </div>
         </div>
     </div>
