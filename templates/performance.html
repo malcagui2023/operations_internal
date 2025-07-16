@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+
+{% block title %}{{ translations.performance }} - {{ translations.app_title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Performance Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2">
+                        <i class="fas fa-chart-line me-3"></i>
+                        {{ translations.performance }}
+                    </h1>
+                    <p class="text-muted">{{ 'Acompanhe seu desempenho e o da equipe' if lang == 'pt' else 'Track your performance and team metrics' }}</p>
+                </div>
+                <div>
+                    <select class="form-select" style="width: auto;">
+                        <option>{{ 'Últimos 7 dias' if lang == 'pt' else 'Last 7 days' }}</option>
+                        <option>{{ 'Últimos 30 dias' if lang == 'pt' else 'Last 30 days' }}</option>
+                        <option>{{ 'Este mês' if lang == 'pt' else 'This month' }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance KPIs -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="display-4 text-primary mb-3">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5>{{ 'Chamadas Realizadas' if lang == 'pt' else 'Calls Made' }}</h5>
+                    <h2 class="text-primary">127</h2>
+                    <p class="text-muted">
+                        <i class="fas fa-arrow-up text-success"></i>
+                        +15% {{ 'vs semana anterior' if lang == 'pt' else 'vs last week' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h5>{{ 'Valor Coletado' if lang == 'pt' else 'Amount Collected' }}</h5>
+                    <h2 class="text-success">R$ 45.2K</h2>
+                    <p class="text-muted">
+                        <i class="fas fa-arrow-up text-success"></i>
+                        +22% {{ 'vs semana anterior' if lang == 'pt' else 'vs last week' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="display-4 text-info mb-3">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h5>{{ 'Taxa de Sucesso' if lang == 'pt' else 'Success Rate' }}</h5>
+                    <h2 class="text-info">23.5%</h2>
+                    <p class="text-muted">
+                        <i class="fas fa-arrow-up text-success"></i>
+                        +3.2% {{ 'vs semana anterior' if lang == 'pt' else 'vs last week' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="display-4 text-warning mb-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h5>{{ 'Uso do AI' if lang == 'pt' else 'AI Usage' }}</h5>
+                    <h2 class="text-warning">89%</h2>
+                    <p class="text-muted">
+                        <i class="fas fa-arrow-up text-success"></i>
+                        +12% {{ 'vs semana anterior' if lang == 'pt' else 'vs last week' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Charts -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-area me-2"></i>
+                        {{ 'Desempenho Diário' if lang == 'pt' else 'Daily Performance' }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="performanceChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-pie-chart me-2"></i>
+                        {{ 'Tipos de Resultado' if lang == 'pt' else 'Result Types' }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="resultTypesChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Performance -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        {{ 'Desempenho da Equipe' if lang == 'pt' else 'Team Performance' }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'Operador' if lang == 'pt' else 'Operator' }}</th>
+                                    <th>{{ 'Chamadas' if lang == 'pt' else 'Calls' }}</th>
+                                    <th>{{ 'Contatos' if lang == 'pt' else 'Contacts' }}</th>
+                                    <th>{{ 'Pagamentos' if lang == 'pt' else 'Payments' }}</th>
+                                    <th>{{ 'Valor (R$)' if lang == 'pt' else 'Amount (R$)' }}</th>
+                                    <th>{{ 'Taxa Sucesso' if lang == 'pt' else 'Success Rate' }}</th>
+                                    <th>{{ 'Uso AI' if lang == 'pt' else 'AI Usage' }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-success">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-success text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <strong>{{ 'Você' if lang == 'pt' else 'You' }}</strong>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">127</span></td>
+                                    <td><span class="badge bg-info">89</span></td>
+                                    <td><span class="badge bg-success">23</span></td>
+                                    <td><strong>R$ 45,200</strong></td>
+                                    <td>
+                                        <span class="badge bg-success">23.5%</span>
+                                        <i class="fas fa-arrow-up text-success ms-1"></i>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="width: 60px;">
+                                            <div class="progress-bar bg-warning" style="width: 89%"></div>
+                                        </div>
+                                        <small>89%</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                MS
+                                            </div>
+                                            Maria Silva
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">134</span></td>
+                                    <td><span class="badge bg-info">95</span></td>
+                                    <td><span class="badge bg-success">28</span></td>
+                                    <td><strong>R$ 52,100</strong></td>
+                                    <td>
+                                        <span class="badge bg-success">25.1%</span>
+                                        <i class="fas fa-arrow-up text-success ms-1"></i>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="width: 60px;">
+                                            <div class="progress-bar bg-warning" style="width: 92%"></div>
+                                        </div>
+                                        <small>92%</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-info text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                JS
+                                            </div>
+                                            João Santos
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">118</span></td>
+                                    <td><span class="badge bg-info">82</span></td>
+                                    <td><span class="badge bg-success">19</span></td>
+                                    <td><strong>R$ 38,900</strong></td>
+                                    <td>
+                                        <span class="badge bg-warning">21.2%</span>
+                                        <i class="fas fa-arrow-down text-danger ms-1"></i>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="width: 60px;">
+                                            <div class="progress-bar bg-warning" style="width: 76%"></div>
+                                        </div>
+                                        <small>76%</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-secondary text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                AC
+                                            </div>
+                                            Ana Costa
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">142</span></td>
+                                    <td><span class="badge bg-info">98</span></td>
+                                    <td><span class="badge bg-success">31</span></td>
+                                    <td><strong>R$ 58,700</strong></td>
+                                    <td>
+                                        <span class="badge bg-success">26.8%</span>
+                                        <i class="fas fa-arrow-up text-success ms-1"></i>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="width: 60px;">
+                                            <div class="progress-bar bg-warning" style="width: 94%"></div>
+                                        </div>
+                                        <small>94%</small>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Usage Analytics -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>
+                        {{ 'Uso das Recomendações do AI' if lang == 'pt' else 'AI Recommendations Usage' }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ 'Sugestões Aceitas' if lang == 'pt' else 'Suggestions Accepted' }}</span>
+                            <span><strong>89%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: 89%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ 'Scripts Utilizados' if lang == 'pt' else 'Scripts Used' }}</span>
+                            <span><strong>76%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: 76%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ 'Alertas de Compliance' if lang == 'pt' else 'Compliance Alerts' }}</span>
+                            <span><strong>95%</strong></span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        {{ 'Insights de Melhoria' if lang == 'pt' else 'Improvement Insights' }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0 px-0">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-arrow-up text-success"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ 'Melhoria na Taxa de Sucesso' if lang == 'pt' else 'Success Rate Improvement' }}</h6>
+                                    <p class="mb-1 text-muted">{{ 'Sua taxa de sucesso aumentou 3.2% esta semana' if lang == 'pt' else 'Your success rate increased 3.2% this week' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-robot text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ 'Alto Uso do AI' if lang == 'pt' else 'High AI Usage' }}</h6>
+                                    <p class="mb-1 text-muted">{{ 'Você está entre os top 10% em uso do AI Companion' if lang == 'pt' else 'You are in the top 10% for AI Companion usage' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-clock text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ 'Horário Ideal' if lang == 'pt' else 'Optimal Time' }}</h6>
+                                    <p class="mb-1 text-muted">{{ 'Suas melhores conversões acontecem entre 14h-16h' if lang == 'pt' else 'Your best conversions happen between 2-4 PM' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Performance Chart
+const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+new Chart(performanceCtx, {
+    type: 'line',
+    data: {
+        labels: ['{{ "Seg" if lang == "pt" else "Mon" }}', '{{ "Ter" if lang == "pt" else "Tue" }}', '{{ "Qua" if lang == "pt" else "Wed" }}', '{{ "Qui" if lang == "pt" else "Thu" }}', '{{ "Sex" if lang == "pt" else "Fri" }}', '{{ "Sáb" if lang == "pt" else "Sat" }}', '{{ "Dom" if lang == "pt" else "Sun" }}'],
+        datasets: [{
+            label: '{{ "Chamadas" if lang == "pt" else "Calls" }}',
+            data: [18, 22, 19, 25, 21, 15, 7],
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            tension: 0.4
+        }, {
+            label: '{{ "Pagamentos" if lang == "pt" else "Payments" }}',
+            data: [4, 6, 3, 7, 5, 2, 1],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Result Types Chart
+const resultTypesCtx = document.getElementById('resultTypesChart').getContext('2d');
+new Chart(resultTypesCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [
+            '{{ "Pagamento Completo" if lang == "pt" else "Full Payment" }}',
+            '{{ "Parcelamento" if lang == "pt" else "Installments" }}',
+            '{{ "Promessa" if lang == "pt" else "Promise" }}',
+            '{{ "Sem Contato" if lang == "pt" else "No Contact" }}'
+        ],
+        datasets: [{
+            data: [35, 25, 20, 20],
+            backgroundColor: ['#28a745', '#007bff', '#ffc107', '#dc3545']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+</script>
+{% endblock %}
+

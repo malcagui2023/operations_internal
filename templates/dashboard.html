@@ -69,71 +69,89 @@
     </div>
 </div>
 
-<!-- Priority Actions -->
+<!-- Priority Actions and AI Suggestions - FIXED HEIGHT -->
 <div class="row mb-4">
     <div class="col-md-8">
-        <div class="card priority-actions-card">
+        <div class="card priority-actions-card" style="height: 350px;">
             <div class="card-header">
                 <h5 class="mb-0">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     Priority Actions
                 </h5>
             </div>
-            <div class="card-body">
-                <div class="priority-action-item high">
-                    <div class="action-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <div class="action-content">
-                        <div class="action-title">High-Value Customer Follow-up</div>
-                        <div class="action-description">Maria Santos - R$ 5,200 debt - Promised callback today</div>
-                        <div class="action-meta">
-                            <span class="badge bg-danger">High Priority</span>
-                            <span class="text-muted">Due: 15:00</span>
+            <div class="card-body" style="overflow-y: auto; max-height: 280px;">
+                <div class="priority-action-item high mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-1">
+                            <div class="action-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="fas fa-phone me-1"></i>Call Now
-                        </button>
+                        <div class="col-8">
+                            <div class="action-content">
+                                <div class="action-title">High-Value Customer Follow-up</div>
+                                <div class="action-description">Maria Santos - R$ 5,200 debt - Promised callback today</div>
+                                <div class="action-meta">
+                                    <span class="badge bg-danger">High Priority</span>
+                                    <span class="text-muted ms-2">Due: 15:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-phone me-1"></i>Call Now
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="priority-action-item medium">
-                    <div class="action-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="action-content">
-                        <div class="action-title">Payment Plan Follow-up</div>
-                        <div class="action-description">João Silva - 2nd installment due tomorrow</div>
-                        <div class="action-meta">
-                            <span class="badge bg-warning">Medium Priority</span>
-                            <span class="text-muted">Due: Tomorrow</span>
+                <div class="priority-action-item medium mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-1">
+                            <div class="action-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-envelope me-1"></i>Send Reminder
-                        </button>
+                        <div class="col-8">
+                            <div class="action-content">
+                                <div class="action-title">Payment Plan Follow-up</div>
+                                <div class="action-description">João Silva - 2nd installment due tomorrow</div>
+                                <div class="action-meta">
+                                    <span class="badge bg-warning">Medium Priority</span>
+                                    <span class="text-muted ms-2">Due: Tomorrow</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-outline-primary btn-sm w-100">
+                                <i class="fas fa-envelope me-1"></i>Send Reminder
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="priority-action-item low">
-                    <div class="action-icon">
-                        <i class="fas fa-calendar"></i>
-                    </div>
-                    <div class="action-content">
-                        <div class="action-title">Scheduled Callbacks</div>
-                        <div class="action-description">5 customers scheduled for this afternoon</div>
-                        <div class="action-meta">
-                            <span class="badge bg-info">Scheduled</span>
-                            <span class="text-muted">14:00 - 17:00</span>
+                    <div class="row align-items-center">
+                        <div class="col-1">
+                            <div class="action-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-list me-1"></i>View List
-                        </button>
+                        <div class="col-8">
+                            <div class="action-content">
+                                <div class="action-title">Scheduled Callbacks</div>
+                                <div class="action-description">5 customers scheduled for this afternoon</div>
+                                <div class="action-meta">
+                                    <span class="badge bg-info">Scheduled</span>
+                                    <span class="text-muted ms-2">14:00 - 17:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-outline-secondary btn-sm w-100">
+                                <i class="fas fa-list me-1"></i>View List
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,41 +159,47 @@
     </div>
     
     <div class="col-md-4">
-        <div class="card ai-insights-card">
+        <div class="card ai-insights-card" style="height: 350px;">
             <div class="card-header">
                 <h5 class="mb-0">
                     <i class="fas fa-lightbulb me-2"></i>
                     {{ translations.ai_suggestions }}
                 </h5>
             </div>
-            <div class="card-body">
-                <div class="ai-insight-item">
-                    <div class="insight-icon success">
-                        <i class="fas fa-arrow-up"></i>
+            <div class="card-body" style="overflow-y: auto; max-height: 280px;">
+                <div class="ai-insight-item mb-3">
+                    <div class="d-flex">
+                        <div class="insight-icon success me-3">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="insight-content">
+                            <div class="insight-title">Peak Performance Time</div>
+                            <div class="insight-description">Your success rate is 40% higher between 2-4 PM</div>
+                        </div>
                     </div>
-                    <div class="insight-content">
-                        <div class="insight-title">Peak Performance Time</div>
-                        <div class="insight-description">Your success rate is 40% higher between 2-4 PM</div>
+                </div>
+                
+                <div class="ai-insight-item mb-3">
+                    <div class="d-flex">
+                        <div class="insight-icon warning me-3">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <div class="insight-content">
+                            <div class="insight-title">Approach Recommendation</div>
+                            <div class="insight-description">Try empathy-first approach for overdue accounts</div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="ai-insight-item">
-                    <div class="insight-icon warning">
-                        <i class="fas fa-exclamation"></i>
-                    </div>
-                    <div class="insight-content">
-                        <div class="insight-title">Approach Recommendation</div>
-                        <div class="insight-description">Try empathy-first approach for overdue accounts</div>
-                    </div>
-                </div>
-                
-                <div class="ai-insight-item">
-                    <div class="insight-icon info">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="insight-content">
-                        <div class="insight-title">Weekly Trend</div>
-                        <div class="insight-description">Collection rate up 15% from last week</div>
+                    <div class="d-flex">
+                        <div class="insight-icon info me-3">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="insight-content">
+                            <div class="insight-title">Weekly Trend</div>
+                            <div class="insight-description">Collection rate up 15% from last week</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,59 +219,91 @@
             </div>
             <div class="card-body">
                 <div class="activity-timeline">
-                    <div class="activity-item success">
-                        <div class="activity-time">14:30</div>
-                        <div class="activity-icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Payment Collected</div>
-                            <div class="activity-description">Ana Costa - R$ 1,200 (Full payment)</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="badge bg-success">Success</span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item success">
-                        <div class="activity-time">14:15</div>
-                        <div class="activity-icon">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Agreement Reached</div>
-                            <div class="activity-description">Carlos Oliveira - 6x payment plan</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="badge bg-success">Success</span>
+                    <div class="activity-item success mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <div class="activity-time">14:30</div>
+                            </div>
+                            <div class="col-1">
+                                <div class="activity-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="activity-content">
+                                    <div class="activity-title">Payment Collected</div>
+                                    <div class="activity-description">Ana Costa - R$ 1,200 (Full payment)</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <span class="badge bg-success">Success</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="activity-item warning">
-                        <div class="activity-time">14:00</div>
-                        <div class="activity-icon">
-                            <i class="fas fa-phone-slash"></i>
+                    <div class="activity-item success mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <div class="activity-time">14:15</div>
+                            </div>
+                            <div class="col-1">
+                                <div class="activity-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="activity-content">
+                                    <div class="activity-title">Agreement Reached</div>
+                                    <div class="activity-description">Carlos Oliveira - 6x payment plan</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <span class="badge bg-success">Success</span>
+                            </div>
                         </div>
-                        <div class="activity-content">
-                            <div class="activity-title">No Contact</div>
-                            <div class="activity-description">Pedro Santos - Voicemail left</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="badge bg-warning">No Contact</span>
+                    </div>
+                    
+                    <div class="activity-item warning mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <div class="activity-time">14:00</div>
+                            </div>
+                            <div class="col-1">
+                                <div class="activity-icon">
+                                    <i class="fas fa-phone-slash"></i>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="activity-content">
+                                    <div class="activity-title">No Contact</div>
+                                    <div class="activity-description">Pedro Santos - Voicemail left</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <span class="badge bg-warning">No Contact</span>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="activity-item info">
-                        <div class="activity-time">13:45</div>
-                        <div class="activity-icon">
-                            <i class="fas fa-calendar-plus"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Callback Scheduled</div>
-                            <div class="activity-description">Lucia Ferreira - Tomorrow 10:00 AM</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="badge bg-info">Scheduled</span>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <div class="activity-time">13:45</div>
+                            </div>
+                            <div class="col-1">
+                                <div class="activity-icon">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="activity-content">
+                                    <div class="activity-title">Callback Scheduled</div>
+                                    <div class="activity-description">Lucia Ferreira - Tomorrow 10:00 AM</div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <span class="badge bg-info">Scheduled</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,323 +1,213 @@
 {% extends "base.html" %}
 
-{% block title %}Assistência ao Vivo Aprimorada - Paschoalotto AI{% endblock %}
+{% block title %}{{ 'Chamada ao Vivo' if lang == 'pt' else 'Live Call' }} - {{ translations.app_title }}{% endblock %}
 
 {% block content %}
-<!-- Enhanced Live Call Interface Demonstrating Input/Output Methods -->
-
-<!-- Call Status Header -->
-<div class="call-status-header mb-4">
-    <div class="row align-items-center">
-        <div class="col-md-8">
-            <div class="call-status-info">
-                <h2 class="mb-1">
-                    <i class="fas fa-phone text-success me-2"></i>
-                    Assistência ao Vivo - Versão Aprimorada
-                </h2>
-                <p class="text-muted mb-0">Demonstração dos métodos de entrada e saída do AI</p>
-            </div>
-        </div>
-        <div class="col-md-4 text-end">
-            <div class="call-controls">
-                <button class="btn btn-success btn-lg me-2" id="startEnhancedCallBtn" onclick="startEnhancedCall()">
-                    <i class="fas fa-phone me-2"></i>Iniciar Chamada
-                </button>
-                <button class="btn btn-danger btn-lg d-none" id="endEnhancedCallBtn" onclick="endEnhancedCall()">
-                    <i class="fas fa-phone-slash me-2"></i>Encerrar
-                </button>
+<div class="container-fluid">
+    <!-- Live Call Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2">
+                        <i class="fas fa-phone me-3 text-success"></i>
+                        {{ 'Assistente de Chamada ao Vivo' if lang == 'pt' else 'Live Call Assistant' }}
+                    </h1>
+                    <p class="text-muted">{{ 'Receba orientações em tempo real durante suas negociações' if lang == 'pt' else 'Get real-time guidance during your negotiations' }}</p>
+                </div>
+                <div>
+                    <button class="btn btn-success btn-lg" id="startCallBtn">
+                        <i class="fas fa-play me-2"></i>
+                        {{ 'Iniciar Chamada' if lang == 'pt' else 'Start Call' }}
+                    </button>
+                    <button class="btn btn-danger btn-lg d-none" id="endCallBtn">
+                        <i class="fas fa-stop me-2"></i>
+                        {{ 'Finalizar Chamada' if lang == 'pt' else 'End Call' }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Active Enhanced Call Interface -->
-<div id="enhancedCallInterface" class="d-none">
-    <div class="row">
-        <!-- Main Input/Output Panel -->
-        <div class="col-md-8">
-            <!-- HYBRID INPUT METHODS -->
-            <div class="card input-methods-card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-microphone me-2"></i>
-                        Métodos de Entrada (Input)
-                    </h5>
-                </div>
+    <!-- Call Status -->
+    <div class="row mb-4" id="callStatus" style="display: none;">
+        <div class="col-12">
+            <div class="card border-success">
                 <div class="card-body">
-                    <!-- Method 1: Quick Text Input -->
-                    <div class="input-method mb-4">
-                        <h6 class="method-title">
-                            <span class="badge bg-success me-2">RECOMENDADO</span>
-                            Método 1: Entrada Rápida de Texto
-                        </h6>
-                        <div class="customer-input-section">
-                            <label class="form-label">O que o cliente disse:</label>
-                            <div class="input-group input-group-lg">
-                                <input type="text" class="form-control" 
-                                       id="enhancedCustomerMessage" 
-                                       placeholder="Digite aqui ou use os botões abaixo..."
-                                       onkeypress="handleEnhancedInput(event)">
-                                <button class="btn btn-primary" onclick="processCustomerInput()">
-                                    <i class="fas fa-brain me-2"></i>Analisar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Quick Response Buttons -->
-                        <div class="quick-response-buttons mt-3">
-                            <h6>Respostas Rápidas (Um Clique):</h6>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button class="btn btn-outline-danger w-100 mb-2" onclick="quickInput('cant_pay')">
-                                        <i class="fas fa-times-circle me-2"></i>Não pode pagar
-                                    </button>
-                                    <button class="btn btn-outline-warning w-100 mb-2" onclick="quickInput('wants_discount')">
-                                        <i class="fas fa-percentage me-2"></i>Quer desconto
-                                    </button>
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-outline-danger w-100 mb-2" onclick="quickInput('angry')">
-                                        <i class="fas fa-angry me-2"></i>Está irritado
-                                    </button>
-                                    <button class="btn btn-outline-success w-100 mb-2" onclick="quickInput('interested')">
-                                        <i class="fas fa-thumbs-up me-2"></i>Interessado
-                                    </button>
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-outline-info w-100 mb-2" onclick="quickInput('needs_time')">
-                                        <i class="fas fa-clock me-2"></i>Precisa de tempo
-                                    </button>
-                                    <button class="btn btn-outline-secondary w-100 mb-2" onclick="quickInput('disputes_debt')">
-                                        <i class="fas fa-question-circle me-2"></i>Contesta dívida
-                                    </button>
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div class="status-indicator bg-success me-3"></div>
+                                <div>
+                                    <h6 class="mb-0">{{ 'Chamada Ativa' if lang == 'pt' else 'Call Active' }}</h6>
+                                    <small class="text-muted" id="callTimer">00:00</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Method 2: Voice-to-Text -->
-                    <div class="input-method mb-4">
-                        <h6 class="method-title">
-                            <span class="badge bg-info me-2">HÍBRIDO</span>
-                            Método 2: Voz para Texto
-                        </h6>
-                        <div class="voice-input-section">
-                            <button class="btn btn-info btn-lg" id="voiceInputBtn" onclick="toggleVoiceInput()">
-                                <i class="fas fa-microphone me-2"></i>
-                                <span id="voiceInputText">Clique e Fale</span>
-                            </button>
-                            <div class="voice-status mt-2">
-                                <small class="text-muted" id="voiceStatus">Clique no botão e fale o que o cliente disse</small>
+                        <div class="col-md-6">
+                            <div class="customer-info">
+                                <h6 class="mb-1">Maria Santos</h6>
+                                <p class="mb-0 text-muted">{{ 'Débito: R$ 5,200 | Vencido há 45 dias' if lang == 'pt' else 'Debt: R$ 5,200 | 45 days overdue' }}</p>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Method 3: Audio Monitoring (Future) -->
-                    <div class="input-method">
-                        <h6 class="method-title">
-                            <span class="badge bg-secondary me-2">FUTURO</span>
-                            Método 3: Monitoramento de Áudio Automático
-                        </h6>
-                        <div class="audio-monitoring-section">
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>Funcionalidade Futura:</strong> O AI irá "escutar" a conversa automaticamente e fornecer sugestões em tempo real sem necessidade de entrada manual.
+                        <div class="col-md-3">
+                            <div class="text-end">
+                                <span class="badge bg-warning fs-6">{{ 'Probabilidade: 70%' if lang == 'pt' else 'Probability: 70%' }}</span>
                             </div>
-                            <button class="btn btn-outline-secondary" disabled>
-                                <i class="fas fa-headphones me-2"></i>Monitoramento Automático (Em Desenvolvimento)
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- CONVERSATION HISTORY -->
-            <div class="card conversation-history-card">
+    <!-- Main Interface -->
+    <div class="row">
+        <!-- Input Section -->
+        <div class="col-md-8">
+            <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-history me-2"></i>
-                        Histórico da Conversa
+                        <i class="fas fa-comments me-2"></i>
+                        {{ 'Entrada de Informações' if lang == 'pt' else 'Information Input' }}
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div id="enhancedConversationLog" class="conversation-log">
-                        <div class="conversation-entry demo">
-                            <div class="entry-header">
-                                <strong>Demo</strong>
-                                <span class="timestamp">14:30</span>
-                            </div>
-                            <div class="entry-message">Use os métodos de entrada acima para ver as recomendações do AI em ação!</div>
+                    <!-- Quick Buttons -->
+                    <div class="mb-4">
+                        <h6>{{ 'Situação do Cliente:' if lang == 'pt' else 'Customer Situation:' }}</h6>
+                        <div class="btn-group-vertical w-100" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-lg mb-2 situation-btn" data-situation="cant_pay">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                {{ 'Não pode pagar' if lang == 'pt' else "Can't pay" }}
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-lg mb-2 situation-btn" data-situation="wants_discount">
+                                <i class="fas fa-percentage me-2"></i>
+                                {{ 'Quer desconto' if lang == 'pt' else 'Wants discount' }}
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-lg mb-2 situation-btn" data-situation="angry">
+                                <i class="fas fa-angry me-2"></i>
+                                {{ 'Cliente irritado' if lang == 'pt' else 'Angry customer' }}
+                            </button>
+                            <button type="button" class="btn btn-outline-success btn-lg mb-2 situation-btn" data-situation="interested">
+                                <i class="fas fa-handshake me-2"></i>
+                                {{ 'Interessado em negociar' if lang == 'pt' else 'Interested in negotiating' }}
+                            </button>
                         </div>
                     </div>
+
+                    <!-- Text Input -->
+                    <div class="mb-4">
+                        <label for="customerInput" class="form-label">
+                            <h6>{{ 'O que o cliente disse?' if lang == 'pt' else 'What did the customer say?' }}</h6>
+                        </label>
+                        <textarea class="form-control form-control-lg" id="customerInput" rows="4" 
+                                  placeholder="{{ 'Digite aqui o que o cliente falou...' if lang == 'pt' else 'Type here what the customer said...' }}"></textarea>
+                    </div>
+
+                    <!-- Voice Input -->
+                    <div class="mb-4">
+                        <button class="btn btn-info btn-lg w-100" id="voiceInputBtn">
+                            <i class="fas fa-microphone me-2"></i>
+                            {{ 'Clique e Fale' if lang == 'pt' else 'Click and Speak' }}
+                        </button>
+                        <small class="text-muted d-block mt-2">
+                            {{ 'Pressione e segure para gravar sua voz' if lang == 'pt' else 'Press and hold to record your voice' }}
+                        </small>
+                    </div>
+
+                    <!-- Analyze Button -->
+                    <button class="btn btn-primary btn-lg w-100" id="analyzeBtn">
+                        <i class="fas fa-brain me-2"></i>
+                        {{ 'Analisar e Obter Recomendações' if lang == 'pt' else 'Analyze and Get Recommendations' }}
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- AI RECOMMENDATIONS PANEL (OUTPUT METHODS) -->
+        <!-- AI Recommendations -->
         <div class="col-md-4">
-            <div class="card ai-output-card sticky-top">
-                <div class="card-header bg-warning text-dark">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-robot me-2"></i>
-                        Saídas do AI (Output)
+                        {{ 'Recomendações do AI' if lang == 'pt' else 'AI Recommendations' }}
                     </h5>
                 </div>
+                <div class="card-body" id="recommendationsPanel">
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-robot fa-3x mb-3"></i>
+                        <p>{{ 'Aguardando informações do cliente para gerar recomendações...' if lang == 'pt' else 'Waiting for customer information to generate recommendations...' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>
+                        {{ 'Ações Rápidas' if lang == 'pt' else 'Quick Actions' }}
+                    </h6>
+                </div>
                 <div class="card-body">
-                    <!-- Priority Alert System -->
-                    <div class="ai-recommendations-panel">
-                        <!-- Compliance Alert (Highest Priority) -->
-                        <div class="recommendation compliance d-none" id="complianceAlert">
-                            <div class="recommendation-header">
-                                <i class="fas fa-shield-alt"></i>
-                                <span class="priority-label">COMPLIANCE</span>
-                                <button class="btn-audio-alert" onclick="playAudioAlert('compliance')">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                            </div>
-                            <div class="recommendation-content" id="complianceContent">
-                                <!-- Compliance alerts appear here -->
-                            </div>
-                        </div>
-
-                        <!-- Urgent Action (High Priority) -->
-                        <div class="recommendation urgent d-none" id="urgentAction">
-                            <div class="recommendation-header">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span class="priority-label">URGENTE</span>
-                                <button class="btn-audio-alert" onclick="playAudioAlert('urgent')">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                            </div>
-                            <div class="recommendation-content" id="urgentContent">
-                                <!-- Urgent recommendations appear here -->
-                            </div>
-                        </div>
-
-                        <!-- Main Suggestion (Medium Priority) -->
-                        <div class="recommendation primary d-none" id="mainSuggestion">
-                            <div class="recommendation-header">
-                                <i class="fas fa-comments"></i>
-                                <span class="priority-label">SUGESTÃO</span>
-                                <button class="btn-copy" onclick="copyToClipboard('mainSuggestionContent')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                            <div class="recommendation-content" id="mainSuggestionContent">
-                                <!-- Main suggestions appear here -->
-                            </div>
-                            <div class="recommendation-actions">
-                                <button class="btn btn-success btn-sm" onclick="useRecommendation('main')">
-                                    <i class="fas fa-check me-1"></i>Usar
-                                </button>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="modifyRecommendation('main')">
-                                    <i class="fas fa-edit me-1"></i>Modificar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Offer Suggestion (Medium Priority) -->
-                        <div class="recommendation offer d-none" id="offerSuggestion">
-                            <div class="recommendation-header">
-                                <i class="fas fa-hand-holding-usd"></i>
-                                <span class="priority-label">OFERTA</span>
-                                <button class="btn-calculator" onclick="openPaymentCalculator()">
-                                    <i class="fas fa-calculator"></i>
-                                </button>
-                            </div>
-                            <div class="recommendation-content" id="offerContent">
-                                <!-- Offer suggestions appear here -->
-                            </div>
-                            <div class="recommendation-actions">
-                                <button class="btn btn-warning btn-sm" onclick="useRecommendation('offer')">
-                                    <i class="fas fa-handshake me-1"></i>Oferecer
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Customer Insight (Low Priority) -->
-                        <div class="recommendation insight d-none" id="customerInsight">
-                            <div class="recommendation-header">
-                                <i class="fas fa-lightbulb"></i>
-                                <span class="priority-label">INSIGHT</span>
-                            </div>
-                            <div class="recommendation-content" id="insightContent">
-                                <!-- Customer insights appear here -->
-                            </div>
-                        </div>
-
-                        <!-- Success Probability Meter -->
-                        <div class="success-probability mt-3">
-                            <h6>Probabilidade de Sucesso</h6>
-                            <div class="progress progress-lg">
-                                <div class="progress-bar bg-success" id="successProbabilityBar" 
-                                     role="progressbar" style="width: 0%" 
-                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                    <span id="successProbabilityText">0%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Audio Output Controls -->
-                        <div class="audio-controls mt-3">
-                            <h6>Controles de Áudio</h6>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="audioAlertsEnabled" checked>
-                                <label class="form-check-label" for="audioAlertsEnabled">
-                                    Alertas Sonoros
-                                </label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="textToSpeechEnabled">
-                                <label class="form-check-label" for="textToSpeechEnabled">
-                                    Texto para Fala
-                                </label>
-                            </div>
-                            <div class="volume-control mt-2">
-                                <label class="form-label">Volume:</label>
-                                <input type="range" class="form-range" id="audioVolume" min="0" max="100" value="50">
-                            </div>
-                        </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="openCalculator()">
+                            <i class="fas fa-calculator me-2"></i>
+                            {{ 'Calculadora' if lang == 'pt' else 'Calculator' }}
+                        </button>
+                        <button class="btn btn-outline-info" onclick="openScripts()">
+                            <i class="fas fa-file-alt me-2"></i>
+                            {{ 'Scripts' if lang == 'pt' else 'Scripts' }}
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="checkCompliance()">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            {{ 'Compliance' if lang == 'pt' else 'Compliance' }}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Demo Instructions -->
-<div id="enhancedDemoInstructions">
-    <div class="card">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-play-circle me-2"></i>
-                Como Testar a Interface Aprimorada
-            </h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>Métodos de Entrada (Input):</h6>
-                    <ol>
-                        <li><strong>Digite</strong> uma mensagem do cliente no campo de texto</li>
-                        <li><strong>Clique</strong> nos botões de resposta rápida</li>
-                        <li><strong>Use voz</strong> clicando em "Clique e Fale"</li>
-                        <li><strong>Pressione Enter</strong> ou clique em "Analisar"</li>
-                    </ol>
+    <!-- Results Section -->
+    <div class="row mt-4" id="resultsSection" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        {{ 'Resultado da Chamada' if lang == 'pt' else 'Call Result' }}
+                    </h5>
                 </div>
-                <div class="col-md-6">
-                    <h6>Saídas do AI (Output):</h6>
-                    <ul>
-                        <li><strong>Recomendações visuais</strong> aparecem no painel direito</li>
-                        <li><strong>Cores indicam prioridade</strong> (vermelho = urgente)</li>
-                        <li><strong>Botões de ação</strong> para usar sugestões</li>
-                        <li><strong>Alertas sonoros</strong> para avisos importantes</li>
-                    </ul>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">{{ 'Resultado:' if lang == 'pt' else 'Result:' }}</label>
+                            <select class="form-select form-select-lg">
+                                <option>{{ 'Pagamento completo' if lang == 'pt' else 'Full payment' }}</option>
+                                <option>{{ 'Parcelamento acordado' if lang == 'pt' else 'Installment agreed' }}</option>
+                                <option>{{ 'Promessa de pagamento' if lang == 'pt' else 'Payment promise' }}</option>
+                                <option>{{ 'Sem acordo' if lang == 'pt' else 'No agreement' }}</option>
+                                <option>{{ 'Reagendar' if lang == 'pt' else 'Reschedule' }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ 'Valor acordado:' if lang == 'pt' else 'Agreed amount:' }}</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="R$ 0,00">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">{{ 'Próxima ação:' if lang == 'pt' else 'Next action:' }}</label>
+                            <input type="datetime-local" class="form-control form-control-lg">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-success btn-lg">
+                            <i class="fas fa-save me-2"></i>
+                            {{ 'Salvar Resultado' if lang == 'pt' else 'Save Result' }}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="text-center mt-3">
-                <button class="btn btn-primary btn-lg" onclick="startEnhancedCall()">
-                    <i class="fas fa-rocket me-2"></i>Iniciar Demonstração
-                </button>
             </div>
         </div>
     </div>
@@ -326,545 +216,275 @@
 
 {% block scripts %}
 <script>
-let voiceRecognition = null;
-let isListening = false;
-let enhancedCallActive = false;
+let callActive = false;
+let callStartTime = null;
+let callTimer = null;
 
-// Initialize enhanced call interface
-function startEnhancedCall() {
-    enhancedCallActive = true;
+// Start Call
+document.getElementById('startCallBtn').addEventListener('click', function() {
+    callActive = true;
+    callStartTime = new Date();
     
-    // Switch interfaces
-    document.getElementById('enhancedDemoInstructions').classList.add('d-none');
-    document.getElementById('enhancedCallInterface').classList.remove('d-none');
-    document.getElementById('startEnhancedCallBtn').classList.add('d-none');
-    document.getElementById('endEnhancedCallBtn').classList.remove('d-none');
+    // Toggle buttons
+    document.getElementById('startCallBtn').classList.add('d-none');
+    document.getElementById('endCallBtn').classList.remove('d-none');
     
-    // Initialize voice recognition
-    initializeVoiceRecognition();
+    // Show call status
+    document.getElementById('callStatus').style.display = 'block';
     
-    showNotification('Demonstração iniciada! Teste os métodos de entrada.', 'success');
-}
+    // Start timer
+    callTimer = setInterval(updateCallTimer, 1000);
+    
+    // Show success message
+    showNotification('{{ "Chamada iniciada! AI Companion ativo." if lang == "pt" else "Call started! AI Companion active." }}', 'success');
+});
 
-function endEnhancedCall() {
-    enhancedCallActive = false;
+// End Call
+document.getElementById('endCallBtn').addEventListener('click', function() {
+    callActive = false;
     
-    // Switch interfaces back
-    document.getElementById('enhancedCallInterface').classList.add('d-none');
-    document.getElementById('enhancedDemoInstructions').classList.remove('d-none');
-    document.getElementById('startEnhancedCallBtn').classList.remove('d-none');
-    document.getElementById('endEnhancedCallBtn').classList.add('d-none');
+    // Toggle buttons
+    document.getElementById('endCallBtn').classList.add('d-none');
+    document.getElementById('startCallBtn').classList.remove('d-none');
     
-    // Stop voice recognition
-    if (voiceRecognition) {
-        voiceRecognition.stop();
+    // Hide call status
+    document.getElementById('callStatus').style.display = 'none';
+    
+    // Stop timer
+    clearInterval(callTimer);
+    
+    // Show results section
+    document.getElementById('resultsSection').style.display = 'block';
+    
+    showNotification('{{ "Chamada finalizada. Registre o resultado." if lang == "pt" else "Call ended. Please record the result." }}', 'info');
+});
+
+// Update call timer
+function updateCallTimer() {
+    if (callStartTime) {
+        const now = new Date();
+        const diff = Math.floor((now - callStartTime) / 1000);
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        document.getElementById('callTimer').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
-    
-    showNotification('Demonstração encerrada.', 'info');
 }
 
-// Voice Recognition Setup
-function initializeVoiceRecognition() {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        voiceRecognition = new SpeechRecognition();
+// Situation buttons
+document.querySelectorAll('.situation-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.situation-btn').forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
         
-        voiceRecognition.lang = 'pt-BR';
-        voiceRecognition.continuous = false;
-        voiceRecognition.interimResults = false;
-        
-        voiceRecognition.onstart = function() {
-            document.getElementById('voiceInputText').textContent = 'Ouvindo...';
-            document.getElementById('voiceStatus').textContent = 'Fale agora...';
-            document.getElementById('voiceInputBtn').classList.add('listening');
-        };
-        
-        voiceRecognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            document.getElementById('enhancedCustomerMessage').value = transcript;
-            processCustomerInput();
-        };
-        
-        voiceRecognition.onend = function() {
-            isListening = false;
-            document.getElementById('voiceInputText').textContent = 'Clique e Fale';
-            document.getElementById('voiceStatus').textContent = 'Clique no botão e fale o que o cliente disse';
-            document.getElementById('voiceInputBtn').classList.remove('listening');
-        };
-        
-        voiceRecognition.onerror = function(event) {
-            showNotification('Erro no reconhecimento de voz: ' + event.error, 'error');
-        };
-    } else {
-        showNotification('Reconhecimento de voz não suportado neste navegador', 'warning');
-    }
-}
-
-function toggleVoiceInput() {
-    if (!voiceRecognition) {
-        showNotification('Reconhecimento de voz não disponível', 'warning');
-        return;
-    }
-    
-    if (isListening) {
-        voiceRecognition.stop();
-    } else {
-        isListening = true;
-        voiceRecognition.start();
-    }
-}
-
-// Quick Input Functions
-function quickInput(responseType) {
-    const responses = {
-        'cant_pay': 'Não tenho dinheiro para pagar agora',
-        'wants_discount': 'Vocês podem dar um desconto?',
-        'angry': 'Estou muito irritado com essa situação!',
-        'interested': 'Estou interessado em resolver isso',
-        'needs_time': 'Preciso de mais tempo para pagar',
-        'disputes_debt': 'Eu não devo esse valor'
-    };
-    
-    const message = responses[responseType];
-    document.getElementById('enhancedCustomerMessage').value = message;
-    processCustomerInput();
-}
-
-// Process Customer Input and Generate AI Recommendations
-function processCustomerInput() {
-    const message = document.getElementById('enhancedCustomerMessage').value.trim();
-    
-    if (!message) {
-        showNotification('Digite ou fale uma mensagem do cliente', 'warning');
-        return;
-    }
-    
-    // Add to conversation history
-    addToEnhancedConversationHistory('customer', message);
-    
-    // Generate AI recommendations based on input
-    generateAIRecommendations(message);
-    
-    // Clear input
-    document.getElementById('enhancedCustomerMessage').value = '';
-    
-    // Play notification sound
-    playNotificationSound();
-}
-
-function generateAIRecommendations(customerMessage) {
-    const lowerMessage = customerMessage.toLowerCase();
-    
-    // Hide all recommendations first
-    hideAllRecommendations();
-    
-    // Generate recommendations based on customer message
-    if (lowerMessage.includes('não tenho dinheiro') || lowerMessage.includes('cant_pay')) {
-        showComplianceAlert('Não mencione ação legal. Foque em soluções de pagamento.');
-        showMainSuggestion('Entendo sua situação. Vamos encontrar uma solução que funcione para você. Que valor você conseguiria pagar mensalmente?');
-        showOfferSuggestion('Ofereça parcelamento em 6x ou desconto de 30% para pagamento à vista');
-        showCustomerInsight('Cliente em dificuldade financeira. Alta probabilidade de aceitar parcelamento (75%)');
-        updateSuccessProbability(75);
-    }
-    else if (lowerMessage.includes('desconto') || lowerMessage.includes('wants_discount')) {
-        showMainSuggestion('Posso verificar que opções temos disponíveis. Para pagamento à vista, conseguimos oferecer condições especiais.');
-        showOfferSuggestion('Autorizado desconto até 40% para pagamento à vista ou 25% para pagamento em até 3x');
-        showCustomerInsight('Cliente interessado em negociar. Probabilidade alta de fechamento (85%)');
-        updateSuccessProbability(85);
-    }
-    else if (lowerMessage.includes('irritado') || lowerMessage.includes('angry')) {
-        showComplianceAlert('Cliente irritado. Mantenha tom calmo e empático. Não discuta.');
-        showUrgentAction('Use técnica de espelhamento: "Entendo que você está frustrado..."');
-        showMainSuggestion('Peço desculpas pelo transtorno. Estou aqui para ajudar a resolver essa situação da melhor forma possível.');
-        showCustomerInsight('Cliente em estado emocional alterado. Priorize acalmar antes de negociar (60%)');
-        updateSuccessProbability(60);
-    }
-    else if (lowerMessage.includes('interessado') || lowerMessage.includes('interested')) {
-        showMainSuggestion('Que bom! Vamos trabalhar juntos para resolver isso. Qual seria a melhor forma de pagamento para você?');
-        showOfferSuggestion('Cliente receptivo - pode oferecer condições padrão ou melhores');
-        showCustomerInsight('Cliente colaborativo. Excelente probabilidade de fechamento (90%)');
-        updateSuccessProbability(90);
-    }
-    else if (lowerMessage.includes('tempo') || lowerMessage.includes('needs_time')) {
-        showMainSuggestion('Compreendo. Quanto tempo você precisaria? Podemos agendar um retorno ou ver opções de parcelamento.');
-        showOfferSuggestion('Ofereça callback em 7-15 dias ou parcelamento com entrada menor');
-        showCustomerInsight('Cliente precisa organizar finanças. Probabilidade média com follow-up (70%)');
-        updateSuccessProbability(70);
-    }
-    else if (lowerMessage.includes('não devo') || lowerMessage.includes('disputes_debt')) {
-        showComplianceAlert('ATENÇÃO: Cliente contesta dívida. Verifique documentação antes de prosseguir.');
-        showUrgentAction('Solicite dados para verificação: CPF, endereço, últimas compras');
-        showMainSuggestion('Vou verificar essas informações. Pode me confirmar seu CPF e endereço para eu consultar aqui?');
-        showCustomerInsight('Contestação de dívida. Necessária verificação antes de negociar (40%)');
-        updateSuccessProbability(40);
-    }
-    else {
-        // Default recommendations
-        showMainSuggestion('Entendo. Pode me explicar melhor sua situação para que eu possa ajudar da melhor forma?');
-        showCustomerInsight('Situação indefinida. Colete mais informações antes de fazer ofertas (50%)');
-        updateSuccessProbability(50);
-    }
-}
-
-// Recommendation Display Functions
-function hideAllRecommendations() {
-    document.getElementById('complianceAlert').classList.add('d-none');
-    document.getElementById('urgentAction').classList.add('d-none');
-    document.getElementById('mainSuggestion').classList.add('d-none');
-    document.getElementById('offerSuggestion').classList.add('d-none');
-    document.getElementById('customerInsight').classList.add('d-none');
-}
-
-function showComplianceAlert(message) {
-    document.getElementById('complianceContent').textContent = message;
-    document.getElementById('complianceAlert').classList.remove('d-none');
-    
-    // Play compliance alert sound
-    if (document.getElementById('audioAlertsEnabled').checked) {
-        playAudioAlert('compliance');
-    }
-}
-
-function showUrgentAction(message) {
-    document.getElementById('urgentContent').textContent = message;
-    document.getElementById('urgentAction').classList.remove('d-none');
-    
-    // Play urgent alert sound
-    if (document.getElementById('audioAlertsEnabled').checked) {
-        playAudioAlert('urgent');
-    }
-}
-
-function showMainSuggestion(message) {
-    document.getElementById('mainSuggestionContent').textContent = message;
-    document.getElementById('mainSuggestion').classList.remove('d-none');
-}
-
-function showOfferSuggestion(message) {
-    document.getElementById('offerContent').textContent = message;
-    document.getElementById('offerSuggestion').classList.remove('d-none');
-}
-
-function showCustomerInsight(message) {
-    document.getElementById('insightContent').textContent = message;
-    document.getElementById('customerInsight').classList.remove('d-none');
-}
-
-function updateSuccessProbability(percentage) {
-    const progressBar = document.getElementById('successProbabilityBar');
-    const progressText = document.getElementById('successProbabilityText');
-    
-    progressBar.style.width = percentage + '%';
-    progressBar.setAttribute('aria-valuenow', percentage);
-    progressText.textContent = percentage + '%';
-    
-    // Update color based on probability
-    progressBar.className = 'progress-bar';
-    if (percentage >= 80) {
-        progressBar.classList.add('bg-success');
-    } else if (percentage >= 60) {
-        progressBar.classList.add('bg-warning');
-    } else {
-        progressBar.classList.add('bg-danger');
-    }
-}
-
-// Audio Functions
-function playAudioAlert(type) {
-    if (!document.getElementById('audioAlertsEnabled').checked) return;
-    
-    const volume = document.getElementById('audioVolume').value / 100;
-    
-    // Create audio context for different alert types
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    // Different frequencies for different alert types
-    const frequencies = {
-        'compliance': 800,  // High pitch for compliance
-        'urgent': 600,      // Medium pitch for urgent
-        'success': 400      // Low pitch for success
-    };
-    
-    oscillator.frequency.setValueAtTime(frequencies[type] || 500, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(volume * 0.1, audioContext.currentTime);
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.2);
-}
-
-function playNotificationSound() {
-    if (document.getElementById('audioAlertsEnabled').checked) {
-        playAudioAlert('success');
-    }
-}
-
-// Text-to-Speech Function
-function speakText(text) {
-    if (!document.getElementById('textToSpeechEnabled').checked) return;
-    
-    if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'pt-BR';
-        utterance.volume = document.getElementById('audioVolume').value / 100;
-        speechSynthesis.speak(utterance);
-    }
-}
-
-// Utility Functions
-function copyToClipboard(elementId) {
-    const text = document.getElementById(elementId).textContent;
-    navigator.clipboard.writeText(text).then(() => {
-        showNotification('Texto copiado!', 'success');
-    });
-}
-
-function useRecommendation(type) {
-    const elementId = type === 'main' ? 'mainSuggestionContent' : 'offerContent';
-    const text = document.getElementById(elementId).textContent;
-    
-    addToEnhancedConversationHistory('operator', text);
-    showNotification('Recomendação utilizada!', 'success');
-    
-    // Speak the text if enabled
-    speakText(text);
-}
-
-function addToEnhancedConversationHistory(speaker, message) {
-    const timestamp = new Date().toLocaleTimeString('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-    
-    const logContainer = document.getElementById('enhancedConversationLog');
-    const entry = document.createElement('div');
-    entry.className = `conversation-entry ${speaker}`;
-    entry.innerHTML = `
-        <div class="entry-header">
-            <strong>${speaker === 'customer' ? 'Cliente' : 'Operador'}</strong>
-            <span class="timestamp">${timestamp}</span>
-        </div>
-        <div class="entry-message">${message}</div>
-    `;
-    
-    logContainer.appendChild(entry);
-    logContainer.scrollTop = logContainer.scrollHeight;
-}
-
-function handleEnhancedInput(event) {
-    if (event.key === 'Enter') {
-        processCustomerInput();
-    }
-}
-
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    // Set up audio volume control
-    document.getElementById('audioVolume').addEventListener('input', function() {
-        // Test volume when changed
-        if (document.getElementById('audioAlertsEnabled').checked) {
-            playAudioAlert('success');
-        }
+        // Generate recommendation based on situation
+        const situation = this.getAttribute('data-situation');
+        generateRecommendation(situation);
     });
 });
+
+// Analyze button
+document.getElementById('analyzeBtn').addEventListener('click', function() {
+    const input = document.getElementById('customerInput').value;
+    if (input.trim()) {
+        generateRecommendationFromText(input);
+    } else {
+        showNotification('{{ "Por favor, digite o que o cliente disse." if lang == "pt" else "Please type what the customer said." }}', 'warning');
+    }
+});
+
+// Voice input (mock)
+document.getElementById('voiceInputBtn').addEventListener('click', function() {
+    showNotification('{{ "Funcionalidade de voz será implementada em breve." if lang == "pt" else "Voice functionality will be implemented soon." }}', 'info');
+});
+
+// Generate recommendation based on situation
+function generateRecommendation(situation) {
+    const recommendations = {
+        'cant_pay': {
+            'pt': {
+                priority: 'ALTA',
+                color: 'danger',
+                title: 'Cliente sem condições de pagamento',
+                suggestion: 'Ofereça parcelamento em até 12x com desconto de 20% para pagamento à vista.',
+                script: '"Entendo sua situação. Que tal dividirmos em parcelas menores? Posso oferecer 12x de R$ 350."'
+            },
+            'en': {
+                priority: 'HIGH',
+                color: 'danger',
+                title: 'Customer unable to pay',
+                suggestion: 'Offer installments up to 12x with 20% discount for cash payment.',
+                script: '"I understand your situation. How about smaller installments? I can offer 12x of R$ 350."'
+            }
+        },
+        'wants_discount': {
+            'pt': {
+                priority: 'MÉDIA',
+                color: 'warning',
+                title: 'Cliente quer desconto',
+                suggestion: 'Ofereça desconto progressivo: 10% à vista, 5% em 3x.',
+                script: '"Posso oferecer 10% de desconto para pagamento à vista hoje. Fica R$ 4.680."'
+            },
+            'en': {
+                priority: 'MEDIUM',
+                color: 'warning',
+                title: 'Customer wants discount',
+                suggestion: 'Offer progressive discount: 10% cash, 5% in 3x.',
+                script: '"I can offer 10% discount for cash payment today. That would be R$ 4,680."'
+            }
+        },
+        'angry': {
+            'pt': {
+                priority: 'ALTA',
+                color: 'danger',
+                title: 'Cliente irritado',
+                suggestion: 'Use abordagem empática. Escute primeiro, depois ofereça soluções.',
+                script: '"Entendo sua frustração. Vamos encontrar uma solução que funcione para você."'
+            },
+            'en': {
+                priority: 'HIGH',
+                color: 'danger',
+                title: 'Angry customer',
+                suggestion: 'Use empathetic approach. Listen first, then offer solutions.',
+                script: '"I understand your frustration. Let\'s find a solution that works for you."'
+            }
+        },
+        'interested': {
+            'pt': {
+                priority: 'BAIXA',
+                color: 'success',
+                title: 'Cliente interessado',
+                suggestion: 'Aproveite o momento. Ofereça a melhor condição disponível.',
+                script: '"Ótimo! Posso oferecer condições especiais para fecharmos hoje."'
+            },
+            'en': {
+                priority: 'LOW',
+                color: 'success',
+                title: 'Interested customer',
+                suggestion: 'Seize the moment. Offer the best available terms.',
+                script: '"Great! I can offer special terms to close this today."'
+            }
+        }
+    };
+    
+    const lang = '{{ lang }}';
+    const rec = recommendations[situation][lang];
+    
+    const panel = document.getElementById('recommendationsPanel');
+    panel.innerHTML = `
+        <div class="alert alert-${rec.color} mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>🔴 PRIORIDADE ${rec.priority}</strong>
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+        </div>
+        
+        <div class="recommendation-item mb-3">
+            <h6><i class="fas fa-lightbulb me-2"></i>${rec.title}</h6>
+            <p class="text-muted">${rec.suggestion}</p>
+        </div>
+        
+        <div class="script-suggestion">
+            <h6><i class="fas fa-quote-left me-2"></i>${lang === 'pt' ? 'Script Sugerido:' : 'Suggested Script:'}</h6>
+            <div class="alert alert-light">
+                <em>${rec.script}</em>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" onclick="copyScript('${rec.script}')">
+                <i class="fas fa-copy me-1"></i>${lang === 'pt' ? 'Copiar' : 'Copy'}
+            </button>
+        </div>
+    `;
+}
+
+// Generate recommendation from text
+function generateRecommendationFromText(text) {
+    // Simple keyword analysis (in real implementation, this would use AI)
+    const keywords = text.toLowerCase();
+    
+    if (keywords.includes('não posso') || keywords.includes('sem dinheiro')) {
+        generateRecommendation('cant_pay');
+    } else if (keywords.includes('desconto') || keywords.includes('redução')) {
+        generateRecommendation('wants_discount');
+    } else if (keywords.includes('irritado') || keywords.includes('raiva')) {
+        generateRecommendation('angry');
+    } else {
+        generateRecommendation('interested');
+    }
+}
+
+// Copy script to clipboard
+function copyScript(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showNotification('{{ "Script copiado!" if lang == "pt" else "Script copied!" }}', 'success');
+    });
+}
+
+// Quick actions
+function openCalculator() {
+    showNotification('{{ "Calculadora será aberta em breve." if lang == "pt" else "Calculator will open soon." }}', 'info');
+}
+
+function openScripts() {
+    showNotification('{{ "Biblioteca de scripts será aberta em breve." if lang == "pt" else "Script library will open soon." }}', 'info');
+}
+
+function checkCompliance() {
+    showNotification('{{ "Verificação de compliance OK ✓" if lang == "pt" else "Compliance check OK ✓" }}', 'success');
+}
+
+// Show notification
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 3000);
+}
 </script>
 
 <style>
-/* Enhanced Interface Styles */
-.input-methods-card {
-    border-left: 4px solid var(--primary-color);
-}
-
-.method-title {
-    font-size: 16px;
-    margin-bottom: var(--spacing-sm);
-}
-
-.input-method {
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: var(--spacing-sm);
-    background: var(--bg-light);
-}
-
-.quick-response-buttons .btn {
-    font-size: 14px;
-    text-align: left;
-    justify-content: flex-start;
-}
-
-.voice-input-section {
-    text-align: center;
-}
-
-#voiceInputBtn {
-    min-width: 200px;
-    transition: all 0.3s ease;
-}
-
-#voiceInputBtn.listening {
-    background: var(--danger-color);
-    border-color: var(--danger-color);
-    animation: pulse 1s infinite;
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
 
-.ai-output-card {
-    border-left: 4px solid var(--warning-color);
+.situation-btn.active {
+    background-color: var(--bs-primary);
+    color: white;
+    border-color: var(--bs-primary);
 }
 
-.ai-recommendations-panel {
-    max-height: 600px;
-    overflow-y: auto;
+.recommendation-item {
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
 }
 
-.recommendation {
+.script-suggestion {
+    background-color: #f8f9fa;
+    padding: 15px;
     border-radius: 8px;
-    padding: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-    border-left: 4px solid;
-    animation: slideInRight 0.3s ease;
-}
-
-.recommendation.compliance {
-    background: #fff5f5;
-    border-left-color: var(--danger-color);
-}
-
-.recommendation.urgent {
-    background: #fff8e1;
-    border-left-color: var(--warning-color);
-}
-
-.recommendation.primary {
-    background: #e3f2fd;
-    border-left-color: var(--primary-color);
-}
-
-.recommendation.offer {
-    background: #e8f5e8;
-    border-left-color: var(--success-color);
-}
-
-.recommendation.insight {
-    background: #f3e5f5;
-    border-left-color: var(--info-color);
-}
-
-.recommendation-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.priority-label {
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.btn-audio-alert,
-.btn-copy,
-.btn-calculator {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 14px;
-    padding: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-audio-alert:hover,
-.btn-copy:hover,
-.btn-calculator:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: var(--primary-color);
-}
-
-.recommendation-content {
-    font-size: 16px;
-    line-height: 1.4;
-    margin-bottom: 8px;
-}
-
-.recommendation-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.success-probability {
-    background: var(--bg-light);
-    border-radius: 8px;
-    padding: var(--spacing-sm);
-}
-
-.progress-lg {
-    height: 24px;
-}
-
-.progress-lg .progress-bar {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 24px;
-}
-
-.audio-controls {
-    background: var(--bg-light);
-    border-radius: 8px;
-    padding: var(--spacing-sm);
-}
-
-.form-check-label {
-    font-size: 14px;
-}
-
-.volume-control {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-.volume-control .form-label {
-    margin: 0;
-    font-size: 14px;
-    min-width: 60px;
-}
-
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-    .ai-output-card {
-        position: static !important;
-        margin-top: var(--spacing-md);
-    }
-    
-    .quick-response-buttons .btn {
-        margin-bottom: var(--spacing-xs);
-    }
 }
 </style>
 {% endblock %}
