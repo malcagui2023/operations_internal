@@ -3,38 +3,25 @@
 {% block title %}{{ 'Treinamento' if lang == 'pt' else 'Training' }} - {{ translations.app_title }}{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>{{ 'Treinamento' if lang == 'pt' else 'Training' }}</h2>
-                <span class="badge bg-primary fs-6">{{ 'Em Desenvolvimento' if lang == 'pt' else 'In Development' }}</span>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>
+                    {{ 'Treinamento' if lang == 'pt' else 'Training' }}
+                </h5>
             </div>
-            
-            <div class="alert alert-info" role="alert">
-                <i class="fas fa-info-circle me-2"></i>
-                {{ 'Esta página está sendo desenvolvida. Em breve você terá acesso a módulos de treinamento completos.' if lang == 'pt' else 'This page is under development. Soon you will have access to complete training modules.' }}
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
-                            <h5>{{ 'Módulos de Treinamento' if lang == 'pt' else 'Training Modules' }}</h5>
-                            <p class="text-muted">{{ 'Aprenda técnicas de cobrança eficazes' if lang == 'pt' else 'Learn effective collection techniques' }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-certificate fa-3x text-success mb-3"></i>
-                            <h5>{{ 'Certificações' if lang == 'pt' else 'Certifications' }}</h5>
-                            <p class="text-muted">{{ 'Obtenha certificados de conclusão' if lang == 'pt' else 'Get completion certificates' }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body text-center py-5">
+                <i class="fas fa-tools fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted">{{ 'Em Desenvolvimento' if lang == 'pt' else 'Under Development' }}</h4>
+                <p class="text-muted">
+                    {{ 'Esta funcionalidade está sendo desenvolvida e estará disponível em breve.' if lang == 'pt' else 'This feature is being developed and will be available soon.' }}
+                </p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    {{ 'Voltar ao Dashboard' if lang == 'pt' else 'Back to Dashboard' }}
+                </a>
             </div>
         </div>
     </div>
