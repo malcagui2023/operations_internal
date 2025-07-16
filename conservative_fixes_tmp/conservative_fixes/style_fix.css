@@ -1,0 +1,24 @@
+/* CONSERVATIVE FIX - Only add these CSS rules to existing style.css */
+
+/* Fix Daily Goals visibility by limiting card heights */
+.priority-actions-card {
+    max-height: 300px !important;
+}
+
+.ai-insights-card {
+    max-height: 300px !important;
+}
+
+.priority-actions-card .card-body,
+.ai-insights-card .card-body {
+    overflow-y: auto;
+    max-height: 220px;
+}
+
+/* Small logo fix - only if you want to add the logo */
+.navbar-brand img {
+    height: 24px;
+    width: auto;
+    margin-right: 8px;
+}
+
