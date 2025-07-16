@@ -83,22 +83,16 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item"
-                     href="{{ url_for(request.endpoint,
-                                      **request.view_args,
-                                      lang='en') }}">
-                    🇺🇸 English
-                  </a>
+                    <a class="dropdown-item" href="{{ request.path }}?lang=en">
+                        🇺🇸 English
+                    </a>
                 </li>
                 <li>
-                  <a class="dropdown-item"
-                     href="{{ url_for(request.endpoint,
-                                      **request.view_args,
-                                      lang='pt') }}">
-                    🇧🇷 Português
-                  </a>
+                    <a class="dropdown-item" href="{{ request.path }}?lang=pt">
+                        🇧🇷 Português
+                    </a>
                 </li>
-              </ul>
+            </ul>
             </li>
             <!-- Settings icon -->
             <li class="nav-item">
