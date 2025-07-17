@@ -843,3 +843,12 @@ textarea:focus {
   overflow-y: auto;
 }
 
+#scm-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbar-brand.d-flex {
+  padding: 0.25rem 0;
+}
