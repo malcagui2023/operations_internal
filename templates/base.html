@@ -18,19 +18,22 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container-fluid">
+            <!-- Brand + Logo -->
             <a class="navbar-brand d-flex align-items-center p-0" href="{{ url_for('dashboard') }}">
                 <img
                   src="{{ url_for('static', filename='images/logo.png') }}"
                   alt="SCM Analytics Logo"
                   id="scm-logo"
                 />
-                <span class="ms-2 text-white h5 mb-0">{{ translations.app_title }}</span>
+                <span class="ms-2 text-white h5 mb-0">Paschoalotto AI Companion</span>
             </a>
 
+            <!-- Mobile toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Nav links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -68,11 +71,11 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             {% for code, language in languages.items() %}
-                            <li>
-                                <a class="dropdown-item" href="#" onclick="setLanguage('{{ code }}')">
-                                    {{ language.flag }} {{ language.name }}
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="setLanguage('{{ code }}')">
+                                        {{ language.flag }} {{ language.name }}
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -95,12 +98,84 @@
 
     <!-- AI Companion Sidebar -->
     <div class="ai-companion-sidebar" id="aiCompanionSidebar">
-        <!-- ... sidebar content ... -->
+        <div class="companion-header">
+            <div class="companion-title">
+                <i class="fas fa-robot me-2"></i>
+                <span>AI Companion</span>
+            </div>
+            <button class="btn-minimize" onclick="toggleCompanion()">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        <div class="companion-content">
+            <div class="status-section mb-3">
+                <div class="status-indicator offline">
+                    <i class="fas fa-circle"></i> Offline
+                </div>
+            </div>
+            <div class="quick-stats mb-3">
+                <div class="stat-item">
+                    <div class="stat-label">{{ translations.calls_made }}</div>
+                    <div class="stat-value" id="todayCalls">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">{{ translations.payments_collected }}</div>
+                    <div class="stat-value" id="todayCollections">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">{{ translations.collection_amount }}</div>
+                    <div class="stat-value" id="todayAmount">R$ 0</div>
+                </div>
+            </div>
+            <div class="quick-actions mb-3">
+                <h6>{{ translations.quick_actions }}</h6>
+                <div class="action-grid">
+                    <button class="action-btn" onclick="quickAction('customer_lookup')">
+                        <i class="fas fa-search"></i>
+                        <span>{{ translations.customer }}</span>
+                    </button>
+                    <button class="action-btn" onclick="quickAction('payment_calculator')">
+                        <i class="fas fa-calculator"></i>
+                        <span>{{ translations.calculator }}</span>
+                    </button>
+                    <button class="action-btn" onclick="quickAction('compliance_check')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>{{ translations.compliance }}</span>
+                    </button>
+                    <button class="action-btn" onclick="quickAction('script_help')">
+                        <i class="fas fa-comments"></i>
+                        <span>{{ translations.scripts }}</span>
+                    </button>
+                </div>
+            </div>
+            <div class="ai-chat mb-3">
+                <h6>{{ translations.ask_ai }}</h6>
+                <div class="suggested-questions mb-2">
+                    <button class="suggestion-btn" onclick="askAI('{{ translations.cant_pay }}')">{{ translations.cant_pay }}?</button>
+                    <button class="suggestion-btn" onclick="askAI('{{ translations.wants_discount }}')">{{ translations.wants_discount }}?</button>
+                    <button class="suggestion-btn" onclick="askAI('{{ translations.angry }}')">{{ translations.angry }}?</button>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="aiChatInput" placeholder="Ask AI..." onkeypress="handleChatKeypress(event)">
+                    <button onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            <div class="live-assistance">
+                <button class="btn btn-success w-100" onclick="startLiveAssistance()">
+                    <i class="fas fa-headset me-2"></i> {{ translations.start_assistance }}
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Mobile FAB Menu -->
     <div class="fab-menu d-lg-none" id="fabMenu">
-        <!-- ... -->
+        <button class="fab-main" onclick="toggleMobileMenu()"><i class="fas fa-robot"></i></button>
+        <div class="fab-options">
+            <button class="fab-option" onclick="quickAction('customer_lookup')"><i class="fas fa-search"></i></button>
+            <button class="fab-option" onclick="quickAction('payment_calculator')"><i class="fas fa-calculator"></i></button>
+            <button class="fab-option" onclick="startLiveAssistance()"><i class="fas fa-headset"></i></button>
+        </div>
     </div>
 
     <!-- Notification Container -->
@@ -108,7 +183,15 @@
 
     <!-- Quick Action Modal -->
     <div class="modal fade" id="quickActionModal" tabindex="-1">
-        <!-- ... -->
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quickActionTitle">Quick Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="quickActionContent"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS & Custom JS -->
@@ -118,22 +201,15 @@
     {% block scripts %}{% endblock %}
 
     <script>
-        // Language switching function
+        // Language switching
         function setLanguage(lang) {
             fetch('/set-language/' + lang)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        location.reload();
-                    }
-                });
+                .then(res => res.json())
+                .then(data => { if (data.status === 'success') location.reload(); });
         }
-
-        // Initialize app on load
+        // Initialize companion
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initializeCompanion === 'function') {
-                initializeCompanion();
-            }
+            if (typeof initializeCompanion === 'function') initializeCompanion();
         });
     </script>
 </body>
