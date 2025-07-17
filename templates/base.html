@@ -18,13 +18,13 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard') }}">
-                <img 
+            <a class="navbar-brand d-flex align-items-center p-0" href="{{ url_for('dashboard') }}">
+                <img
                   src="{{ url_for('static', filename='images/logo.png') }}"
                   alt="SCM Analytics Logo"
                   id="scm-logo"
                 />
-                <span class="ms-2">{{ translations.app_title }}</span>
+                <span class="ms-2 text-white h5 mb-0">{{ translations.app_title }}</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -32,41 +32,41 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-A me-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>{{ translations.dashboard }}
+                            <i class="fas fa-tachometer-alt me-1"></i>{{ translations.dashboard }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('live_call') }}">
-                            <i class="fas fa-phone me-2"></i>{{ translations.live_call }}
+                            <i class="fas fa-phone me-1"></i>{{ translations.live_call }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('live_call_enhanced') }}">
-                            <i class="fas fa-phone-alt me-2"></i>Enhanced Demo
+                            <i class="fas fa-star me-1"></i>Enhanced Demo
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('performance') }}">
-                            <i class="fas fa-chart-line me-2"></i>{{ translations.performance }}
+                            <i class="fas fa-chart-line me-1"></i>{{ translations.performance }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('training') }}">
-                            <i class="fas fa-graduation-cap me-2"></i>{{ translations.training }}
+                            <i class="fas fa-graduation-cap me-1"></i>{{ translations.training }}
                         </a>
                     </li>
                 </ul>
 
-                <!-- Language Switcher -->
-                <div class="navbar-nav">
-                    <div class="nav-item dropdown">
+                <!-- Language Switcher & Settings -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             {{ languages[lang].flag }} {{ languages[lang].name }}
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             {% for code, language in languages.items() %}
                             <li>
                                 <a class="dropdown-item" href="#" onclick="setLanguage('{{ code }}')">
@@ -75,12 +75,13 @@
                             </li>
                             {% endfor %}
                         </ul>
-                    </div>
-
-                    <a class="nav-link" href="{{ url_for('settings') }}">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -94,7 +95,7 @@
 
     <!-- AI Companion Sidebar -->
     <div class="ai-companion-sidebar" id="aiCompanionSidebar">
-        <!-- ... rest of sidebar unchanged ... -->
+        <!-- ... sidebar content ... -->
     </div>
 
     <!-- Mobile FAB Menu -->
@@ -110,9 +111,8 @@
         <!-- ... -->
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS & Custom JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
     {% block scripts %}{% endblock %}
@@ -129,7 +129,7 @@
                 });
         }
 
-        // Initialize app
+        // Initialize app on load
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof initializeCompanion === 'function') {
                 initializeCompanion();
